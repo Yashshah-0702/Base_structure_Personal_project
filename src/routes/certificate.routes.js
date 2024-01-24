@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { uploadImgStorage } = require("../utils/file-upload.utils");
 const {
   createCertificate,
   getAllCertificates,
@@ -10,7 +11,12 @@ const {
 const isAuthenticated = require("../middleware/authentication.middelware");
 
 module.exports = () => {
-  router.post("/createCertificate", isAuthenticated, createCertificate);
+  router.post(
+    "/createCertificate",
+    isAuthenticated,
+    uploadImgStorage,
+    createCertificate
+  );
   router.get("/getCertificate", isAuthenticated, getAllCertificates);
   router.get("/getCertificate/:id", isAuthenticated, getCertificateById);
   router.patch("/updateCertificate/:id", isAuthenticated, updateCertificate);

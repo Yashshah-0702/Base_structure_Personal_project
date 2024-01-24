@@ -1,0 +1,5 @@
+module.exports = {
+    jwtConfig: require('./jwt.config'),
+    mediaConfig: require('./media.config'),
+    loggerConfig: require('./logger.config'),
+  }

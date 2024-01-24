@@ -1,10 +1,46 @@
+const path = require("path");
+const fs = require("fs");
 const Certificate = require("../models/certificate.model");
 const { success, failure } = require("../utils/response.utils");
 const { httpsStatusCodes, serverResponseMessage } = require("../constants/");
+const {
+  mediaConfig,
+  mediaConfig: {
+    imageUpload: { ImagePath },
+  },
+} = require("../configs");
+
+const removeCertificate = async (certificate) => {
+  const certificatePath = certificate?.certificate_path;
+  if (certificatePath) {
+    const existingCertificateFileName = certificatePath.split("/").pop();
+    const dir = path.resolve(__dirname, "../../");
+    const existingCertificatePath = path.join(
+      dir,
+      mediaConfig.main_upload_dir +
+        "/" +
+        ImagePath +
+        existingCertificateFileName
+    );
+    if (fs.existsSync(existingCertificatePath)) {
+      await fs.promises.unlink(existingCertificatePath);
+    }
+  }
+};
+
+const createOrUpdateCertificate = async (certificate, certificatePath) => {
+  if (certificate) {
+    await certificate.update({ certificate_path: certificatePath });
+  } else {
+    await Certificate.create({ certificate_path: certificatePath });
+  }
+};
 
 exports.createCertificate = async (req, res) => {
   try {
     const { user } = req;
+    const profileImagePath =
+      req.media_details.file_path + req.media_details.name;
     if (user.user_type === 2) {
       return failure(
         res,
@@ -14,6 +50,7 @@ exports.createCertificate = async (req, res) => {
     }
     const data = {
       ...req.body,
+      certificate_path: profileImagePath,
     };
     const response = await Certificate.create(data);
     return success(
