@@ -19,11 +19,11 @@ app.get("/", (req, res) => {
 app.use(require("./src/routes")(router));
 
 mongoose
-  .connect("mongodb://localhost:27017/certificate")
-  .then((data) => {
-    console.log("connected to database..");
-    app.listen(7000);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+.connect("mongodb://localhost:27017/certificate")
+.then((data) => {
+  console.log("connected to database..");
+})
+.catch((err) => {
+  console.log(err);
+});
+app.listen(7000);

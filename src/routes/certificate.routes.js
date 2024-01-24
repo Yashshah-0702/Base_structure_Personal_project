@@ -17,10 +17,30 @@ module.exports = () => {
     uploadImgStorage,
     createCertificate
   );
-  router.get("/getCertificate", isAuthenticated, getAllCertificates);
-  router.get("/getCertificate/:id", isAuthenticated, getCertificateById);
-  router.patch("/updateCertificate/:id", isAuthenticated, updateCertificate);
-  router.delete("/deleteCertificate/:id", isAuthenticated, deleteCertificate);
+  router.get(
+    "/getCertificate",
+    isAuthenticated,
+    uploadImgStorage,
+    getAllCertificates
+  );
+  router.get(
+    "/getCertificate/:id",
+    isAuthenticated,
+    uploadImgStorage,
+    getCertificateById
+  );
+  router.patch(
+    "/updateCertificate/:id",
+    isAuthenticated,
+    uploadImgStorage,
+    updateCertificate
+  );
+  router.delete(
+    "/deleteCertificate/:id",
+    isAuthenticated,
+    uploadImgStorage,
+    deleteCertificate
+  );
   //   router.post("/login",login)
   return router;
 };

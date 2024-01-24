@@ -6,3 +6,6 @@ node_modules/
 
 # Logs
 logs
+
+#Public Files 
+public/uploads/*

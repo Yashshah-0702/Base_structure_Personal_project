@@ -9,37 +9,22 @@ const {
     imageUpload: { ImagePath },
   },
 } = require("../configs");
-
+const dir = path.resolve(__dirname, "../../");
 const removeCertificate = async (certificate) => {
-  const certificatePath = certificate?.certificate_path;
-  if (certificatePath) {
-    const existingCertificateFileName = certificatePath.split("/").pop();
-    const dir = path.resolve(__dirname, "../../");
-    const existingCertificatePath = path.join(
-      dir,
-      mediaConfig.main_upload_dir +
-        "/" +
-        ImagePath +
-        existingCertificateFileName
-    );
-    if (fs.existsSync(existingCertificatePath)) {
-      await fs.promises.unlink(existingCertificatePath);
-    }
-  }
-};
-
-const createOrUpdateCertificate = async (certificate, certificatePath) => {
-  if (certificate) {
-    await certificate.update({ certificate_path: certificatePath });
-  } else {
-    await Certificate.create({ certificate_path: certificatePath });
-  }
+  const existingCertificateFileName = certificate.certificate_path
+    .split("/")
+    .pop();
+  const existingCertificatePath = path.join(
+    dir,
+    mediaConfig.main_upload_dir + "/" + ImagePath + existingCertificateFileName
+  );
+  await fs.promises.unlink(existingCertificatePath);
 };
 
 exports.createCertificate = async (req, res) => {
   try {
     const { user } = req;
-    const profileImagePath =
+    const certificatePath =
       req.media_details.file_path + req.media_details.name;
     if (user.user_type === 2) {
       return failure(
@@ -50,7 +35,7 @@ exports.createCertificate = async (req, res) => {
     }
     const data = {
       ...req.body,
-      certificate_path: profileImagePath,
+      certificate_path: certificatePath,
     };
     const response = await Certificate.create(data);
     return success(
@@ -115,6 +100,8 @@ exports.getCertificateById = async (req, res) => {
 exports.updateCertificate = async (req, res) => {
   try {
     const { user } = req;
+    const certificatePath =
+      req.media_details.file_path + req.media_details.name;
     if (user.user_type === 2) {
       return failure(
         res,
@@ -130,8 +117,10 @@ exports.updateCertificate = async (req, res) => {
         serverResponseMessage.CERTIFICATE_NOT_FOUND
       );
     }
+    await removeCertificate(certificate);
     const data = {
       ...req.body,
+      certificate_path: certificatePath,
     };
     const response = await Certificate.findByIdAndUpdate(req.params.id, data, {
       new: true,
@@ -143,6 +132,7 @@ exports.updateCertificate = async (req, res) => {
       response
     );
   } catch (error) {
+    console.log(error);
     return failure(
       res,
       httpsStatusCodes.INTERNAL_SERVER_ERROR,
@@ -162,6 +152,7 @@ exports.deleteCertificate = async (req, res) => {
       );
     }
     const certificate = await Certificate.findById(req.params.id);
+
     if (!certificate) {
       return failure(
         res,
@@ -169,6 +160,7 @@ exports.deleteCertificate = async (req, res) => {
         serverResponseMessage.CERTIFICATE_NOT_FOUND
       );
     }
+    await removeCertificate(certificate);
     await Certificate.findByIdAndDelete(req.params.id);
     return success(
       res,
