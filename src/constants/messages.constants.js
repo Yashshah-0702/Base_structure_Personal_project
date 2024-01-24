@@ -15,6 +15,7 @@ const serverResponseMessage = {
     /* Catch Error */
     INTERNAL_SERVER_ERROR: "Internal Server Error",
     TOKEN_EXPIRED: "Token expired",
+    INVALID_TOKEN:"Invalid token",
   };
   
   module.exports = { serverResponseMessage };

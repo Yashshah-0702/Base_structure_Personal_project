@@ -6,7 +6,7 @@ const jwtConfig = {
   | JWT
   |--------------------------------------------------------------------------
   */
-  jwtSecret: process.env.JWT_SECRET_KEY,
-  tokenExpiration: process.env.TOKEN_EXPIRATION,
+  jwtSecret: "Hn16ed08YP",
+  tokenExpiration: "1h",
 };
 module.exports = jwtConfig;

@@ -1,6 +1,7 @@
 const User = require("../models/user.model");
 const { success, failure } = require("../utils/response.utils");
 const { httpsStatusCodes, serverResponseMessage } = require("../constants/");
+const { jwtConfig } = require("../configs");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -63,9 +64,9 @@ exports.login = async (req, res) => {
     }
     const token = jwt.sign(
       { email: user.email, id: user._id, user_type: user.user_type },
-      "somesupersecretsecret",
+      jwtConfig.jwtSecret,
       {
-        expiresIn: "1h",
+        expiresIn: jwtConfig.tokenExpiration,
       }
     );
     const data = {
