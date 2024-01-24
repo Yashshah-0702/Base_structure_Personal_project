@@ -70,7 +70,6 @@ module.exports = {
           "INVALID_FILE_FORMAT"
         );
       } else if (err) {
-        console.log(err);
         return failure(
           res,
           httpsStatusCodes.INTERNAL_SERVER_ERROR,

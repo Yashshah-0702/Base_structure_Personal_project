@@ -1,9 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-// const { logger } = require("./src/utils");
+const { logger } = require("./src/utils");
 const mongoose = require("mongoose");
 const router = express.Router();
+const { databaseConfig } = require("./src/configs");
 
 const app = express();
 
@@ -19,11 +20,11 @@ app.get("/", (req, res) => {
 app.use(require("./src/routes")(router));
 
 mongoose
-.connect("mongodb://localhost:27017/certificate")
-.then((data) => {
-  console.log("connected to database..");
-})
-.catch((err) => {
-  console.log(err);
-});
-app.listen(7000);
+  .connect(databaseConfig.url)
+  .then((data) => {
+    logger.info(`Server is running on port:${databaseConfig.port}`);
+  })
+  .catch((err) => {
+    logger.error("error while connecting to database..", err);
+  });
+app.listen(databaseConfig.port);

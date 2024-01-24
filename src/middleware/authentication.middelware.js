@@ -42,7 +42,6 @@ const isAuthenticated = async (req, res, next) => {
     }
   } catch (error) {
     // Handle other errors
-    console.error(error);
     return failure(
       res,
       httpsStatusCodes.INTERNAL_SERVER_ERROR,

@@ -45,7 +45,6 @@ exports.createCertificate = async (req, res) => {
       response
     );
   } catch (error) {
-    console.log(error);
     return failure(
       res,
       httpsStatusCodes.INTERNAL_SERVER_ERROR,
@@ -132,7 +131,6 @@ exports.updateCertificate = async (req, res) => {
       response
     );
   } catch (error) {
-    console.log(error);
     return failure(
       res,
       httpsStatusCodes.INTERNAL_SERVER_ERROR,
