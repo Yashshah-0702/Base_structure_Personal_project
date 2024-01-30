@@ -4,6 +4,14 @@ const { httpsStatusCodes, serverResponseMessage } = require("../constants/");
 
 exports.createTemplate = async(req,res)=>{
     try {
+        const { user } = req;
+        if (user.user_type === 2) {
+          return failure(
+            res,
+            httpsStatusCodes.ACCESS_DENIED,
+            serverResponseMessage.ACCESS_DENIED
+          );
+        }
         const data = {
           ...req.body,
         };
@@ -25,6 +33,14 @@ exports.createTemplate = async(req,res)=>{
 
 exports.updateTemplate = async(req,res)=>{
     try {
+        const { user } = req;
+        if (user.user_type === 2) {
+          return failure(
+            res,
+            httpsStatusCodes.ACCESS_DENIED,
+            serverResponseMessage.ACCESS_DENIED
+          );
+        }
         const template = await Template.findById(req.params.id);
         if(!template){
             return failure(
